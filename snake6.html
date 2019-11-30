@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #main{
+            width:704px;
+            height:504px;
+            border: 2px solid black;
+            margin:0 auto;
+            padding:0px 0px 0px 0px ;
+        }
+        h2{
+            text-align: center;
+        }
+        .white{
+            color:white;
+        }
+        #main div{
+            width:20px;
+            height:20px;
+            border: 1px solid black;
+            float: left;
+            margin:0px 0px;
+        }
+        .black{
+            background-color:black;
+        }
+        .white{
+            background-color:white;
+        }
+        .red{
+            background-color:red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Snake</h2>
+    <div id="main">
+        
+    </div>
+</body>
+    <script>
+        let direc=1;//小蛇移动方向
+        let food_exist=0;
+        let id=document.querySelector("#main");
+        let snake=[335,336,337,338,339];
+
+        function cDiv(did,className) {
+            var div = document.createElement('div');    
+            
+            if(className) {
+                div.className = className;    
+            }
+            if(id){
+                div.setAttribute("id",did);
+            }
+
+            return div;
+        }
+        
+        function canvas(){
+            for(let i=0;i<736;i++){
+                    id.appendChild(cDiv(i,"white"));
+            }
+            
+        }
+
+        function rand(min,max) {
+          return Math.floor(Math.random()*(max-min)) + min;
+        }
+
+        function drawsnake(){
+            let z=0;//记录在蛇外还是蛇内
+            for(let i=0;i<736;i++){
+                for(let j=0;j<snake.length;j++){
+                    if(i==snake[j]){
+                        z=1;
+                    }
+                }
+                if(z==1){
+                    document.getElementById(i).className="black";
+                }else{
+                    document.getElementById(i).className="white";
+                }
+                z=0;
+            }
+        }
+
+         function drawfood(){
+            let ran=rand(0,735);
+            for(let j=0;j<snake.length;j++){
+                    for(;ran==snake[j];){
+                        ran=rand(0,735);
+                    }
+                }
+                console.log(ran);
+                console.log(document.getElementById(ran));
+                document.getElementById(ran).className="red";
+                console.log(document.getElementById(ran));
+                food_exist=1; 
+        }
+
+        function move(direc){
+             let z=snake[0];
+           if(direc==1){
+                snake.unshift(z-1);
+                snake.pop();
+            }
+            if(direc==2){
+                snake.unshift(z-32);
+                 snake.pop();
+            }
+            if(direc==3){
+                snake.unshift(z+1);
+                snake.pop();
+            }
+            if(direc==4){
+                snake.unshift(z+32);
+                snake.pop();
+            }
+            drawsnake();
+            //if(food_exist==0)
+            
+            
+        }
+
+        function keypush(evt) {  
+           
+            switch(evt.key) {
+                case 'a':
+                    if(direc!=3){
+                        direc=1;
+                        move(direc);
+                    }
+                    
+                    break;
+                case 'w':
+                   if(direc!=4){
+                        direc=2;
+                        move(direc);
+                    }
+                    break;
+                case 's':
+                   if(direc!=2){
+                        direc=4;
+                        move(direc);
+                    }
+                    break;
+                case 'd':
+                   if(direc!=1){
+                        direc=3;
+                        move(direc);
+                    }
+                    break; 
+            }
+        }
+        
+        function init(){
+            canvas();
+
+            drawsnake();
+            drawfood();
+            move();
+            clock = window.setInterval('move(direc);' , 250);
+        }
+        
+        window.addEventListener("keydown",keypush);
+        init();
+
+    </script>
+</html>
